@@ -1,6 +1,6 @@
 # Panoply
 
-A small, fast desktop utility for common developer tasks. Built with [egui](https://github.com/emilk/egui) in Rust.
+Tiny and fast desktop utility for common developer tasks. Built with [egui](https://github.com/emilk/egui) in Rust.
 
 ![Panoply Screenshot](screenshot.png)
 
@@ -13,34 +13,12 @@ A small, fast desktop utility for common developer tasks. Built with [egui](http
 
 Quick search and keyboard navigation (arrow keys + enter) to jump between tools.
 
+Still **WIP**
+
 ## Usage on NixOS (with Flakes)
 
-### Run directly
+### Run with Nix
 
 ```bash
 nix run github:Code-Growers/panoply
-```
-
-### Add to your system flake
-
-```nix
-{
-  inputs.panoply.url = "github:Code-Growers/panoply";
-
-  outputs = { self, nixpkgs, panoply, ... }:
-    let
-      system = "x86_64-linux";
-      pkgs = nixpkgs.legacyPackages.${system};
-    in
-    {
-      homeConfigurations.user = home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
-        modules = [
-          {
-            home.packages = [ panoply.packages.${system}.default ];
-          }
-        ];
-      };
-    };
-}
 ```
