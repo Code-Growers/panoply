@@ -21,15 +21,38 @@ pub fn url_decode(input: &str) -> Result<String, String> {
         .map_err(|e| e.to_string())
 }
 
-pub fn generate_password(length: usize) -> String {
+pub fn generate_password(
+    length: usize,
+    use_lowercase: bool,
+    use_uppercase: bool,
+    use_digits: bool,
+    use_special: bool,
+) -> String {
     use rand::Rng;
-    const CHARSET: &[u8] =
-        b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
+
+    let mut charset = Vec::new();
+    if use_lowercase {
+        charset.extend_from_slice(b"abcdefghijklmnopqrstuvwxyz");
+    }
+    if use_uppercase {
+        charset.extend_from_slice(b"ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+    }
+    if use_digits {
+        charset.extend_from_slice(b"0123456789");
+    }
+    if use_special {
+        charset.extend_from_slice(b"!@#$%^&*");
+    }
+
+    if charset.is_empty() {
+        return String::new();
+    }
+
     let mut rng = rand::thread_rng();
     (0..length)
         .map(|_| {
-            let idx = rng.gen_range(0..CHARSET.len());
-            CHARSET[idx] as char
+            let idx = rng.gen_range(0..charset.len());
+            charset[idx] as char
         })
         .collect()
 }
